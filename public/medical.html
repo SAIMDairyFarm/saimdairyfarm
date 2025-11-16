@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health & Medical - SAIM Dairy Farm</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header"><h2>🐄 SAIM Dairy Farm</h2><p>Management System</p></div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/dashboard.html" class="nav-link"><span>📊</span> Dashboard</a></li>
+                <li class="nav-item"><a href="/livestock.html" class="nav-link"><span>🐮</span> Livestock Management</a></li>
+                <li class="nav-item"><a href="/medical.html" class="nav-link active"><span>💉</span> Health & Medical</a></li>
+                <li class="nav-item"><a href="/milk.html" class="nav-link"><span>🥛</span> Milk Production</a></li>
+                <li class="nav-item"><a href="/feed.html" class="nav-link"><span>🌾</span> Feed & Inventory</a></li>
+                <li class="nav-item"><a href="/hr.html" class="nav-link"><span>👥</span> Human Resources</a></li>
+                <li class="nav-item"><a href="/profile.html" class="nav-link"><span>👤</span> Profile</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="topbar">
+                <div class="topbar-left"><h1>Health & Medical Management</h1></div>
+                <div class="topbar-right">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">A</div>
+                        <div><div style="font-weight: 600; font-size: 14px;" id="userName">Admin</div>
+                        <div style="font-size: 12px; color: #6c757d;" id="userRole">Administrator</div></div>
+                    </div>
+                    <button class="btn btn-danger btn-sm" onclick="auth.logout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Medical Records</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-secondary btn-sm" onclick="downloadPDF()">📄 Download PDF</button>
+                            <button class="btn btn-primary btn-sm" onclick="openAddModal()">+ Add Record</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-bar">
+                            <div class="search-box"><input type="text" class="form-control" id="searchInput" placeholder="Search by Animal ID..."></div>
+                            <select class="form-control" id="typeFilter" style="max-width: 200px;">
+                                <option value="">All Types</option>
+                                <option value="Treatment">Treatment</option>
+                                <option value="Vaccination">Vaccination</option>
+                                <option value="Checkup">Checkup</option>
+                                <option value="Surgery">Surgery</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr><th>Animal ID</th><th>Type</th><th>Date</th><th>Doctor</th><th>Diagnosis</th><th>Treatment</th><th>Actions</th></tr>
+                                </thead>
+                                <tbody id="medicalTable"><tr><td colspan="7" class="text-center">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="recordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="modalTitle">Add Medical Record</h2><button class="close" onclick="closeModal()">&times;</button></div>
+            <form id="recordForm">
+                <input type="hidden" id="recordId">
+                <div class="form-grid">
+                    <div class="form-group"><label>Animal ID *</label><input type="text" class="form-control" id="animalId" required></div>
+                    <div class="form-group"><label>Type *</label>
+                        <select class="form-control" id="recordType" required>
+                            <option value="Treatment">Treatment</option>
+                            <option value="Vaccination">Vaccination</option>
+                            <option value="Checkup">Checkup</option>
+                            <option value="Surgery">Surgery</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Date *</label><input type="date" class="form-control" id="date" required></div>
+                    <div class="form-group"><label>Doctor Name</label><input type="text" class="form-control" id="doctorName"></div>
+                    <div class="form-group"><label>Symptoms</label><input type="text" class="form-control" id="symptoms"></div>
+                    <div class="form-group"><label>Diagnosis</label><input type="text" class="form-control" id="diagnosis"></div>
+                    <div class="form-group"><label>Treatment</label><input type="text" class="form-control" id="treatment"></div>
+                    <div class="form-group"><label>Medication</label><input type="text" class="form-control" id="medication"></div>
+                    <div class="form-group"><label>Vaccine Name</label><input type="text" class="form-control" id="vaccineName"></div>
+                    <div class="form-group"><label>Next Vaccination Date</label><input type="date" class="form-control" id="nextVaccinationDate"></div>
+                    <div class="form-group"><label>Cost</label><input type="number" class="form-control" id="cost"></div>
+                    <div class="form-group form-grid-full"><label>Notes</label><textarea class="form-control" id="notes" rows="3"></textarea></div>
+                </div>
+                <div class="mt-20">
+                    <button type="submit" class="btn btn-primary">Save Record</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/medical.js"></script>
+</body>
+</html>

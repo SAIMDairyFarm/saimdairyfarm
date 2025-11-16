@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milk Production - SAIM Dairy Farm</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header"><h2>🐄 SAIM Dairy Farm</h2><p>Management System</p></div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/dashboard.html" class="nav-link"><span>📊</span> Dashboard</a></li>
+                <li class="nav-item"><a href="/livestock.html" class="nav-link"><span>🐮</span> Livestock Management</a></li>
+                <li class="nav-item"><a href="/medical.html" class="nav-link"><span>💉</span> Health & Medical</a></li>
+                <li class="nav-item"><a href="/milk.html" class="nav-link active"><span>🥛</span> Milk Production</a></li>
+                <li class="nav-item"><a href="/feed.html" class="nav-link"><span>🌾</span> Feed & Inventory</a></li>
+                <li class="nav-item"><a href="/hr.html" class="nav-link"><span>👥</span> Human Resources</a></li>
+                <li class="nav-item"><a href="/profile.html" class="nav-link"><span>👤</span> Profile</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="topbar">
+                <div class="topbar-left"><h1>Milk Production Management</h1></div>
+                <div class="topbar-right">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">A</div>
+                        <div><div style="font-weight: 600; font-size: 14px;" id="userName">Admin</div>
+                        <div style="font-size: 12px; color: #6c757d;" id="userRole">Administrator</div></div>
+                    </div>
+                    <button class="btn btn-danger btn-sm" onclick="auth.logout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 25px;">
+                    <div class="stat-card">
+                        <div class="stat-info"><h3 id="todayTotal">0L</h3><p>Today's Total</p></div>
+                        <div class="stat-icon">🥛</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info"><h3 id="weekTotal">0L</h3><p>This Week</p></div>
+                        <div class="stat-icon">📊</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Milk Production Records</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-secondary btn-sm" onclick="downloadPDF()">📄 Download PDF</button>
+                            <button class="btn btn-primary btn-sm" onclick="openAddModal()">+ Add Record</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-bar">
+                            <div class="search-box"><input type="text" class="form-control" id="searchInput" placeholder="Search by Animal ID..."></div>
+                            <select class="form-control" id="sessionFilter" style="max-width: 150px;">
+                                <option value="">All Sessions</option>
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr><th>Animal ID</th><th>Date</th><th>Session</th><th>Quantity (L)</th><th>Fat %</th><th>Quality</th><th>Actions</th></tr>
+                                </thead>
+                                <tbody id="milkTable"><tr><td colspan="7" class="text-center">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="milkModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="modalTitle">Add Milk Record</h2><button class="close" onclick="closeModal()">&times;</button></div>
+            <form id="milkForm">
+                <input type="hidden" id="recordId">
+                <div class="form-grid">
+                    <div class="form-group"><label>Animal ID *</label><input type="text" class="form-control" id="animalId" required></div>
+                    <div class="form-group"><label>Date *</label><input type="date" class="form-control" id="date" required></div>
+                    <div class="form-group"><label>Session *</label>
+                        <select class="form-control" id="session" required>
+                            <option value="AM">AM (Morning)</option>
+                            <option value="PM">PM (Evening)</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Quantity (Liters) *</label><input type="number" step="0.1" class="form-control" id="quantity" required></div>
+                    <div class="form-group"><label>Fat Content %</label><input type="number" step="0.1" class="form-control" id="fatContent"></div>
+                    <div class="form-group"><label>SNF %</label><input type="number" step="0.1" class="form-control" id="snf"></div>
+                    <div class="form-group"><label>Quality</label>
+                        <select class="form-control" id="quality">
+                            <option value="Excellent">Excellent</option>
+                            <option value="Good" selected>Good</option>
+                            <option value="Average">Average</option>
+                            <option value="Poor">Poor</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-grid-full"><label>Notes</label><textarea class="form-control" id="notes" rows="2"></textarea></div>
+                </div>
+                <div class="mt-20">
+                    <button type="submit" class="btn btn-primary">Save Record</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/milk.js"></script>
+</body>
+</html>

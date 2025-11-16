@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human Resources - SAIM Dairy Farm</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header"><h2>🐄 SAIM Dairy Farm</h2><p>Management System</p></div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/dashboard.html" class="nav-link"><span>📊</span> Dashboard</a></li>
+                <li class="nav-item"><a href="/livestock.html" class="nav-link"><span>🐮</span> Livestock Management</a></li>
+                <li class="nav-item"><a href="/medical.html" class="nav-link"><span>💉</span> Health & Medical</a></li>
+                <li class="nav-item"><a href="/milk.html" class="nav-link"><span>🥛</span> Milk Production</a></li>
+                <li class="nav-item"><a href="/feed.html" class="nav-link"><span>🌾</span> Feed & Inventory</a></li>
+                <li class="nav-item"><a href="/hr.html" class="nav-link active"><span>👥</span> Human Resources</a></li>
+                <li class="nav-item"><a href="/profile.html" class="nav-link"><span>👤</span> Profile</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="topbar">
+                <div class="topbar-left"><h1>Human Resources</h1></div>
+                <div class="topbar-right">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">A</div>
+                        <div><div style="font-weight: 600; font-size: 14px;" id="userName">Admin</div>
+                        <div style="font-size: 12px; color: #6c757d;" id="userRole">Administrator</div></div>
+                    </div>
+                    <button class="btn btn-danger btn-sm" onclick="auth.logout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Employees</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-secondary btn-sm" onclick="downloadPDF()">📄 Download PDF</button>
+                            <button class="btn btn-primary btn-sm" onclick="openAddEmployeeModal()">+ Add Employee</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-bar">
+                            <div class="search-box"><input type="text" class="form-control" id="employeeSearch" placeholder="Search employees..."></div>
+                            <select class="form-control" id="statusFilter" style="max-width: 200px;">
+                                <option value="">All Status</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="On Leave">On Leave</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Name</th><th>Role</th><th>Contact</th><th>Start Date</th><th>Status</th><th>Actions</th></tr></thead>
+                                <tbody id="employeesTable"><tr><td colspan="6" class="text-center">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Doctors/Consultants</h2>
+                        <button class="btn btn-primary btn-sm" onclick="openAddDoctorModal()">+ Add Doctor</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Name</th><th>Specialization</th><th>Contact</th><th>Clinic</th><th>Consultation Fee</th><th>Actions</th></tr></thead>
+                                <tbody id="doctorsTable"><tr><td colspan="6" class="text-center">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="employeeModalTitle">Add Employee</h2><button class="close" onclick="closeEmployeeModal()">&times;</button></div>
+            <form id="employeeForm">
+                <input type="hidden" id="employeeId">
+                <div class="form-grid">
+                    <div class="form-group"><label>Name *</label><input type="text" class="form-control" id="employeeName" required></div>
+                    <div class="form-group"><label>Role *</label>
+                        <select class="form-control" id="employeeRole" required>
+                            <option value="Milker">Milker</option>
+                            <option value="Feeder">Feeder</option>
+                            <option value="General Farmhand">General Farmhand</option>
+                            <option value="Supervisor">Supervisor</option>
+                            <option value="Maintenance">Maintenance</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Contact Number *</label><input type="text" class="form-control" id="employeeContact" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" class="form-control" id="employeeEmail"></div>
+                    <div class="form-group"><label>Start Date *</label><input type="date" class="form-control" id="startDate" required></div>
+                    <div class="form-group"><label>Salary</label><input type="number" class="form-control" id="salary"></div>
+                    <div class="form-group"><label>Status</label>
+                        <select class="form-control" id="employeeStatus">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="On Leave">On Leave</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-grid-full"><label>Address</label><textarea class="form-control" id="address" rows="2"></textarea></div>
+                </div>
+                <div class="mt-20">
+                    <button type="submit" class="btn btn-primary">Save Employee</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEmployeeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="doctorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="doctorModalTitle">Add Doctor</h2><button class="close" onclick="closeDoctorModal()">&times;</button></div>
+            <form id="doctorForm">
+                <input type="hidden" id="doctorId">
+                <div class="form-grid">
+                    <div class="form-group"><label>Name *</label><input type="text" class="form-control" id="doctorName" required></div>
+                    <div class="form-group"><label>Specialization *</label>
+                        <select class="form-control" id="specialization" required>
+                            <option value="Veterinarian">Veterinarian</option>
+                            <option value="Nutritionist">Nutritionist</option>
+                            <option value="Surgeon">Surgeon</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Contact Number *</label><input type="text" class="form-control" id="doctorContact" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" class="form-control" id="doctorEmail"></div>
+                    <div class="form-group"><label>Clinic</label><input type="text" class="form-control" id="clinic"></div>
+                    <div class="form-group"><label>Consultation Fee</label><input type="number" class="form-control" id="consultationFee"></div>
+                    <div class="form-group form-grid-full"><label>Available Days</label><input type="text" class="form-control" id="availableDays" placeholder="e.g., Mon-Fri, 9 AM - 5 PM"></div>
+                    <div class="form-group form-grid-full"><label>Address</label><textarea class="form-control" id="doctorAddress" rows="2"></textarea></div>
+                </div>
+                <div class="mt-20">
+                    <button type="submit" class="btn btn-primary">Save Doctor</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeDoctorModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/hr.js"></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed & Inventory - SAIM Dairy Farm</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header"><h2>🐄 SAIM Dairy Farm</h2><p>Management System</p></div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/dashboard.html" class="nav-link"><span>📊</span> Dashboard</a></li>
+                <li class="nav-item"><a href="/livestock.html" class="nav-link"><span>🐮</span> Livestock Management</a></li>
+                <li class="nav-item"><a href="/medical.html" class="nav-link"><span>💉</span> Health & Medical</a></li>
+                <li class="nav-item"><a href="/milk.html" class="nav-link"><span>🥛</span> Milk Production</a></li>
+                <li class="nav-item"><a href="/feed.html" class="nav-link active"><span>🌾</span> Feed & Inventory</a></li>
+                <li class="nav-item"><a href="/hr.html" class="nav-link"><span>👥</span> Human Resources</a></li>
+                <li class="nav-item"><a href="/profile.html" class="nav-link"><span>👤</span> Profile</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="topbar">
+                <div class="topbar-left"><h1>Feed & Inventory Management</h1></div>
+                <div class="topbar-right">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">A</div>
+                        <div><div style="font-weight: 600; font-size: 14px;" id="userName">Admin</div>
+                        <div style="font-size: 12px; color: #6c757d;" id="userRole">Administrator</div></div>
+                    </div>
+                    <button class="btn btn-danger btn-sm" onclick="auth.logout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Feed Inventory</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-secondary btn-sm" onclick="downloadPDF()">📄 Download PDF</button>
+                            <button class="btn btn-primary btn-sm" onclick="openAddModal()">+ Add Item</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-bar">
+                            <div class="search-box"><input type="text" class="form-control" id="searchInput" placeholder="Search items..."></div>
+                            <select class="form-control" id="categoryFilter" style="max-width: 200px;">
+                                <option value="">All Categories</option>
+                                <option value="Hay">Hay</option>
+                                <option value="Silage">Silage</option>
+                                <option value="Concentrate">Concentrate</option>
+                                <option value="Supplement">Supplement</option>
+                                <option value="Medicine">Medicine</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr><th>Item Name</th><th>Category</th><th>Current Stock</th><th>Reorder Level</th><th>Status</th><th>Supplier</th><th>Actions</th></tr>
+                                </thead>
+                                <tbody id="inventoryTable"><tr><td colspan="7" class="text-center">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Feed Allocations</h2>
+                        <button class="btn btn-primary btn-sm" onclick="openAllocationModal()">+ Allocate Feed</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Date</th><th>Feed Item</th><th>Quantity</th><th>Allocated To</th></tr></thead>
+                                <tbody id="allocationsTable"><tr><td colspan="4" class="text-center">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="modalTitle">Add Inventory Item</h2><button class="close" onclick="closeModal()">&times;</button></div>
+            <form id="itemForm">
+                <input type="hidden" id="itemId">
+                <div class="form-grid">
+                    <div class="form-group"><label>Item Name *</label><input type="text" class="form-control" id="itemName" required></div>
+                    <div class="form-group"><label>Category *</label>
+                        <select class="form-control" id="category" required>
+                            <option value="Hay">Hay</option>
+                            <option value="Silage">Silage</option>
+                            <option value="Concentrate">Concentrate</option>
+                            <option value="Supplement">Supplement</option>
+                            <option value="Medicine">Medicine</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Current Stock *</label><input type="number" class="form-control" id="currentStock" required></div>
+                    <div class="form-group"><label>Unit *</label>
+                        <select class="form-control" id="unit" required>
+                            <option value="KG">KG</option>
+                            <option value="Liters">Liters</option>
+                            <option value="Bags">Bags</option>
+                            <option value="Units">Units</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Reorder Level *</label><input type="number" class="form-control" id="reorderLevel" required></div>
+                    <div class="form-group"><label>Supplier</label><input type="text" class="form-control" id="supplier"></div>
+                    <div class="form-group form-grid-full"><label>Notes</label><textarea class="form-control" id="notes" rows="2"></textarea></div>
+                </div>
+                <div class="mt-20">
+                    <button type="submit" class="btn btn-primary">Save Item</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="allocationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2>Allocate Feed</h2><button class="close" onclick="closeAllocationModal()">&times;</button></div>
+            <form id="allocationForm">
+                <div class="form-grid">
+                    <div class="form-group"><label>Feed Item *</label><select class="form-control" id="feedItemId" required></select></div>
+                    <div class="form-group"><label>Quantity *</label><input type="number" class="form-control" id="quantity" required></div>
+                    <div class="form-group form-grid-full"><label>Allocated To *</label><input type="text" class="form-control" id="allocatedTo" placeholder="e.g., Barn A, Group 1" required></div>
+                    <div class="form-group form-grid-full"><label>Notes</label><textarea class="form-control" id="allocationNotes" rows="2"></textarea></div>
+                </div>
+                <div class="mt-20">
+                    <button type="submit" class="btn btn-primary">Allocate</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeAllocationModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/feed.js"></script>
+</body>
+</html>
