@@ -11,8 +11,3 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`Access the application at http://localhost:${PORT}`);
   }
 });
-
-// Health check endpoint for Railway
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
-});
